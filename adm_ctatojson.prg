@@ -1,7 +1,6 @@
-// Programa   : ADM_CTAtoJSON
-// Fecha/Hora : 24-10-2016 22:29:55
+// Nombre     : ADM_CTAtoJSON
 // Proposito  : Convertir Plan de Cuentas en Json 
-// Tabla      : DPCTA
+// Dependencia: tab_DPCTA
 
 #INCLUDE "DPXBASE.CH"
 
@@ -101,26 +100,26 @@ FUNC MAIN()
 RETURN .T.
 
 FUNCTION PANTALLA(cMemo)
-   LOCAL oFont,oFontB,oDlg,oBtn,oMemo
-   LOCAL nTop:=100,nLeft:=10,nAncho:=450,nAlto:=498,nClrPane1:=16774636,cTitulo:="Crtl+C para Copiar"
+  LOCAL oFont,oFontB,oDlg,oBtn,oMemo
+  LOCAL nTop:=100,nLeft:=10,nAncho:=450,nAlto:=498,nClrPane1:=16774636,cTitulo:="Crtl+C para Copiar"
 
-   DEFINE FONT oFont   NAME "Courier New" SIZE 0, -14 BOLD
-   DEFINE FONT oFontB  NAME "Arial"       SIZE 0, -12 BOLD
+    DEFINE FONT oFont   NAME "Courier New" SIZE 0, -14 BOLD
+    DEFINE FONT oFontB  NAME "Arial"       SIZE 0, -12 BOLD
 
-   DEFINE DIALOG oDlg TITLE cTitulo;
-                 COLOR NIL, 16773862
+    DEFINE DIALOG oDlg TITLE cTitulo;
+                  COLOR NIL, 16773862
 
-   @ 00,00 GET oMemo  VAR cMemo;
-           MEMO SIZE 80,80; 
-           READONLY;
-           FONT oFont
+    @ 00,00 GET oMemo  VAR cMemo;
+            MEMO SIZE 80,80; 
+            READONLY;
+            FONT oFont
 
-   @ 12,15 BUTTON " Cerrar "; 
-           FONT oFontB;
-           SIZE 40,14;
-           ACTION oDlg:End()
+    @ 12,15 BUTTON " Cerrar "; 
+            FONT oFontB;
+            SIZE 40,14;
+            ACTION oDlg:End()
 
-   ACTIVATE DIALOG oDlg ON INIT (oDlg:Move(nTop,nLeft,nAncho,nAlto,.T.),;
+    ACTIVATE DIALOG oDlg ON INIT (oDlg:Move(nTop,nLeft,nAncho,nAlto,.T.),;
                                  oMemo:SetSize(nAncho-10,nAlto-70,.T.),;
                                  oMemo:SetColor(NIL,12713983),;
                                  DPFOCUS(oBtn),.F.)  

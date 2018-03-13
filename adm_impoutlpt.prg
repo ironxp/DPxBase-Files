@@ -101,7 +101,6 @@ chr(27)+"!"+chr(153) La impresora imprimirá a 12 cpp, en negrita, altura doble 
         PADL(aData[I,5],14)+PADL(cTipIva,2)+DEC(TRAN(aData[I,6],"999,999,999.99"))
     NEXT I
 
-
 *** PIE DE PAGINA
     cMemo:=cMemo+CRLF+;
            "----------------------------------------"+CRLF+;
@@ -120,7 +119,6 @@ chr(27)+"!"+chr(153) La impresora imprimirá a 12 cpp, en negrita, altura doble 
     oTable:End()
 
 *** CUADRO DE DIALOGO O IMPRESION DIRECTA
-
       IF lPrint
         IIF(nCopy=1,PANTALLA(cMemo,cOutLpt),PRINTLPT(cMemo,cOutLpt))
       ELSE
@@ -128,40 +126,38 @@ chr(27)+"!"+chr(153) La impresora imprimirá a 12 cpp, en negrita, altura doble 
       ENDIF
 
     NEXT nCopy
-
                                
 RETURN .T.
 
 FUNCTION PANTALLA(cMemo,cOutLpt)
-   LOCAL oFont,oFontB,oDlg,oBtn,oMemo
-   LOCAL nTop:=100,nLeft:=10,nAncho:=360,nAlto:=498,nClrPane1:=16774636,cTitulo:="RECIBO DE PAGO"
+  LOCAL oFont,oFontB,oDlg,oBtn,oMemo
+  LOCAL nTop:=100,nLeft:=10,nAncho:=360,nAlto:=498,nClrPane1:=16774636,cTitulo:="RECIBO DE PAGO"
 
+  DEFINE FONT oFont   NAME "Courier New" SIZE 0, -14 BOLD
+  DEFINE FONT oFontB  NAME "Arial"       SIZE 0, -12 BOLD
 
-   DEFINE FONT oFont   NAME "Courier New" SIZE 0, -14 BOLD
-   DEFINE FONT oFontB  NAME "Arial"       SIZE 0, -12 BOLD
+  DEFINE DIALOG oDlg TITLE cTitulo;
+                COLOR NIL, 16773862
 
-   DEFINE DIALOG oDlg TITLE cTitulo;
-                 COLOR NIL, 16773862
+    @ 00,00 GET oMemo  VAR cMemo;
+            MEMO SIZE 80,80; 
+            READONLY;
+            FONT oFont
 
-   @ 00,00 GET oMemo  VAR cMemo;
-           MEMO SIZE 80,80; 
-           READONLY;
-           FONT oFont
+    @ 12,03 BUTTON oBtn PROMPT " Imprimir "; 
+            FONT oFontB;
+            SIZE 40,14;
+            ACTION (MsgRun("Imprimiendo","Por Favor Espere",{||PRINTLPT(cMemo,cOutLpt)}),oDlg:End())
 
-   @ 12,03 BUTTON oBtn PROMPT " Imprimir "; 
-           FONT oFontB;
-           SIZE 40,14;
-           ACTION (MsgRun("Imprimiendo","Por Favor Espere",{||PRINTLPT(cMemo,cOutLpt)}),oDlg:End())
+    @ 12,15 BUTTON " Cerrar "; 
+            FONT oFontB;
+            SIZE 40,14;
+            ACTION oDlg:End()
 
-   @ 12,15 BUTTON " Cerrar "; 
-           FONT oFontB;
-           SIZE 40,14;
-           ACTION oDlg:End()
-
-   ACTIVATE DIALOG oDlg ON INIT (oDlg:Move(nTop,nLeft,nAncho,nAlto,.T.),;
-                                 oMemo:SetSize(nAncho-10,nAlto-70,.T.),;
-                                 oMemo:SetColor(NIL,12713983),;
-                                 DPFOCUS(oBtn),.F.)  
+    ACTIVATE DIALOG oDlg ON INIT (oDlg:Move(nTop,nLeft,nAncho,nAlto,.T.),;
+                                  oMemo:SetSize(nAncho-10,nAlto-70,.T.),;
+                                  oMemo:SetColor(NIL,12713983),;
+                                  DPFOCUS(oBtn),.F.)  
 
 RETURN .T.
 
@@ -175,7 +171,6 @@ FUNCTION PRINTLPT(cMemo,cOutLpt)
     Set(23,"OFF" )
     Set PRINT OFF
     Set PRINT TO
-
 RETURN .T.
 
 FUNCTION DEC(cConDev)

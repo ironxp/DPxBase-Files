@@ -1,8 +1,7 @@
 // Programa   : ADM_CTAtoJSON
 // Fecha/Hora : 24-10-2016 22:29:55
 // Proposito  : Convertir Plan de Cuentas en Json 
-// Tabla      : DPDOCCLI - DPMOVINV
-
+// Tabla      : DPCTA
 
 #INCLUDE "DPXBASE.CH"
 
@@ -42,8 +41,6 @@ FUNC MAIN()
       cMemo:=cMemo+CRLF+;
              SPACE(nTab*2)+'"'+RTRIM(aData1[a1,1])+'": {'+CRLF
 
-      //cMemo:=cMemo+SPACE(nTab*3)+'"Aqui Cuenta Nivel 2": "'+RTRIM(aData1[a1,2])+'"'
-
 //*** Nivel 2 ***
 	  aData2:=ASQL('SELECT CTA_DESCRI,CTA_CODIGO FROM DPCTA WHERE CTA_ACTIVO = 1 HAVING LEFT(CTA_CODIGO,1)'+GetWhere('=',aData1[a1,2])+' AND LENGTH(CTA_CODIGO) = 2 ')
 			 
@@ -51,16 +48,12 @@ FUNC MAIN()
         cTipo2:=''
 		cMemo:=cMemo+SPACE(nTab*3)+'"'+RTRIM(aData2[a2,1])+'" :{'+CRLF
 
-		//Aqui Agregar Siguiente Nivel
-		  
 //*** Nivel 3 ***
         aData3:=ASQL("SELECT CTA_DESCRI,CTA_CODIGO FROM DPCTA WHERE CTA_ACTIVO = 1 HAVING LEFT(CTA_CODIGO,2)"+GetWhere("=",aData2[a2,2])+" AND LENGTH(CTA_CODIGO) = 4 ")
 								 
         FOR  a3=1 TO LEN(aData3)
           cTipo3:=""
           cMemo:=cMemo+SPACE(nTab*4)+'"'+RTRIM(aData3[a3,1])+'" :{'+CRLF
-
-          //Aqui Agregar Siguiente Nivel
 
 //*** Nivel 4 ***
           aData4:=ASQL("SELECT CTA_DESCRI,CTA_CODIGO FROM DPCTA WHERE CTA_ACTIVO = 1 HAVING LEFT(CTA_CODIGO,4)"+GetWhere("=",aData3[a3,2])+" AND LENGTH(CTA_CODIGO) = 6 ")
@@ -103,16 +96,13 @@ FUNC MAIN()
     cMemo:=cMemo+CRLF+;
            SPACE(ntab)+"}"+CRLF+"}"
            
-
-*** CUADRO DE DIALOGO
     PANTALLA(cMemo)
-                               
+                        
 RETURN .T.
 
 FUNCTION PANTALLA(cMemo)
    LOCAL oFont,oFontB,oDlg,oBtn,oMemo
-   LOCAL nTop:=100,nLeft:=10,nAncho:=1050,nAlto:=498,nClrPane1:=16774636,cTitulo:="Crtl+C para Copiar"
-
+   LOCAL nTop:=100,nLeft:=10,nAncho:=450,nAlto:=498,nClrPane1:=16774636,cTitulo:="Crtl+C para Copiar"
 
    DEFINE FONT oFont   NAME "Courier New" SIZE 0, -14 BOLD
    DEFINE FONT oFontB  NAME "Arial"       SIZE 0, -12 BOLD
